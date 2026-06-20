@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
+
+        .producto, .item {
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+        }
+
+        button {
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Mini Tienda</h1>
+
+<h2>Productos</h2>
+<div id="productos"></div>
+
+<h2>Carrito</h2>
+<div id="carrito"></div>
+
+<h3>Total: $<span id="total">0</span></h3>
+
+<button onclick="vaciar()">Vaciar carrito</button>
+
+<script>
+
+    const productos = [
+        {id:1, nombre:"Camiseta", precio:15},
+        {id:2, nombre:"Pantalón", precio:30},
+        {id:3, nombre:"Zapatos", precio:45},
+        {id:4, nombre:"Guantes", precio:10},
+        {id:5, nombre:"Chaqueta", precio:70}
+    ];
+
+    let carrito = [];
+
+    function mostrarProductos() {
+        const contenedor = document.getElementById("productos");
+        contenedor.innerHTML = "";
+
+        productos.forEach(p => {
+            contenedor.innerHTML += `
+            <div class="producto">
+                ${p.nombre} - $${p.precio}
+                <button onclick="agregar(${p.id})">
+                    Agregar
+                </button>
+            </div>
+        `;
+        });
+    }
+
+    function agregar(id) {
+        const producto = productos.find(p => p.id === id);
+
+        const existe = carrito.find(i => i.id === id);
+
+        if (existe) {
+            existe.cantidad++;
+        } else {
+            carrito.push({
+                ...producto,
+                cantidad: 1
+            });
+        }
+
+        actualizarCarrito();
+    }
+
+    function quitar(id) {
+        const item = carrito.find(i => i.id === id);
+
+        if (!item) return;
+
+        item.cantidad--;
+
+        if (item.cantidad <= 0) {
+            carrito = carrito.filter(i => i.id !== id);
+        }
+
+        actualizarCarrito();
+    }
+
+    function vaciar() {
+        carrito = [];
+        actualizarCarrito();
+    }
+
+    function actualizarCarrito() {
+
+        const contenedor = document.getElementById("carrito");
+
+        if (carrito.length === 0) {
+            contenedor.innerHTML = "Carrito vacío";
+            document.getElementById("total").textContent = 0;
+            return;
+        }
+
+        contenedor.innerHTML = "";
+
+        let total = 0;
+
+        carrito.forEach(item => {
+
+            total += item.precio * item.cantidad;
+
+            contenedor.innerHTML += `
+            <div class="item">
+                ${item.nombre}
+                x ${item.cantidad}
+                = $${item.precio * item.cantidad}
+                <button onclick="quitar(${item.id})">-</button>
+            </div>
+        `;
+        });
+
+        document.getElementById("total").textContent = total;
+    }
+
+    mostrarProductos();
+    actualizarCarrito();
+
+</script>
+
+</body>
+</html>
