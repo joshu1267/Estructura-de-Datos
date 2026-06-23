@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cola de Correos</title>
+</head>
+<body>
+
+<h2>Procesamiento de Correos</h2>
+
+<input type="email" id="correo" placeholder="Ingrese un correo">
+<button onclick="agregarCorreo()">Agregar</button>
+<button onclick="enviarCorreo()">Enviar siguiente</button>
+
+<h3>Correos pendientes:</h3>
+<ul id="lista"></ul>
+
+<script>
+    let cola = [];
+
+    function agregarCorreo() {
+        const input = document.getElementById("correo");
+        const correo = input.value;
+
+        if (correo === "") {
+            alert("Ingrese un correo");
+            return;
+        }
+
+        cola.push(correo);
+        input.value = "";
+
+        mostrarCola();
+    }
+
+    function enviarCorreo() {
+        if (cola.length === 0) {
+            alert("No hay correos pendientes");
+            return;
+        }
+
+        const enviado = cola.shift();
+        alert("Correo enviado a: " + enviado);
+
+        mostrarCola();
+    }
+
+    function mostrarCola() {
+        const lista = document.getElementById("lista");
+        lista.innerHTML = "";
+
+        for (let correo of cola) {
+            let item = document.createElement("li");
+            item.textContent = correo;
+            lista.appendChild(item);
+        }
+    }
+</script>
+
+</body>
+</html>
