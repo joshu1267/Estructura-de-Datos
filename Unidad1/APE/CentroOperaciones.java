@@ -9,7 +9,7 @@ public class CentroOperaciones {
         }
         return true;
     }
-
+   
   public static int buscarLineal(Paquete[] lista, int id) {
         for (int i = 0; i < lista.length; i++) {
             if (lista[i].id == id) {
